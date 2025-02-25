@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const portfolioModel = require("../models/portfolio.model");
 const express = require("express");
 
-const uploadDir = path.join(__dirname, "uploads");
+const uploadDir = path.join(__dirname, "../uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
