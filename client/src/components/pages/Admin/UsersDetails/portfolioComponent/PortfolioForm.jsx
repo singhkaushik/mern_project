@@ -11,13 +11,13 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import MessageSnackbar from "../../../../../basic utility component/snackbar/MessageSnackbar";
-import Config from "../../../../config/Config"
+import Config from "../../../../config/Config";
 
-// Validation Schema
+// ✅ Updated Validation Schema (Allows file upload)
 const portfolioSchema = yup.object({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
-  image: yup.string(),
+  image: yup.mixed().nullable(), // Accepts files
   link: yup.string().url("Invalid URL"),
 });
 
@@ -52,20 +52,23 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
       fd.append("description", values.description);
       fd.append("link", values.link);
 
+      // ✅ Debug: Check FormData before sending
+      console.log("FormData Entries:", [...fd.entries()]);
+
       try {
         let response;
         if (initialValues._id) {
           response = await axios.put(
             `${Config.Backend_Path}/api/v1/portfolio/${initialValues._id}`,
-            fd
+            fd,
+            { withCredentials: true } // ✅ Correct placement
           );
           setMessage("Portfolio updated successfully!");
         } else {
           response = await axios.post(
             `${Config.Backend_Path}/api/v1/portfolio/create`,
             fd,
-            { headers: { "Content-Type": "multipart/form-data" } },
-            { withCredentials: true },
+            { withCredentials: true } // ✅ Correct placement
           );
           setMessage("Portfolio created successfully!");
         }
@@ -73,7 +76,7 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
         setMessageType("success");
         resetForm();
         handleClearFile();
-        onSubmit(); 
+        onSubmit();
       } catch (error) {
         setMessage(error.response?.data?.message || "Something went wrong!");
         setMessageType("error");
@@ -81,12 +84,13 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
     },
   });
 
-  // Handle Image Selection
+  // ✅ Handle Image Selection & Update Formik State
   const addImage = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setImageUrl(URL.createObjectURL(selectedFile));
       setFile(selectedFile);
+      formik.setFieldValue("image", selectedFile); // ✅ Update Formik State
     }
   };
 
@@ -107,7 +111,7 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
   return (
     <Box>
       <MessageSnackbar
-        open={Boolean(message)} 
+        open={Boolean(message)}
         message={message}
         messageType={messageType}
         handleClose={handleMessageClose}
@@ -132,7 +136,15 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
           {initialValues._id ? "Edit Portfolio" : "Create Portfolio"}
         </Typography>
 
-        <TextField type="file" inputRef={fileInputRef} onChange={addImage} sx={{ mb: 2 }} />
+        {/* ✅ Updated File Input */}
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={addImage}
+          style={{ marginBottom: "10px" }}
+        />
+
         {imageUrl && (
           <CardMedia
             component="img"
