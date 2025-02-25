@@ -32,11 +32,12 @@ const createPortfolio = async (req, res) => {
       console.log("Parsed Fields:", fields);
       console.log("Parsed Files:", files);
 
-      if (!files.image || !files.image.filepath) {
+      // Ensure image exists and access first element if it's an array
+      const photo = Array.isArray(files.image) ? files.image[0] : files.image;
+      if (!photo || !photo.filepath) {
         return res.status(400).json({ success: false, message: "Image file is required" });
       }
 
-      const photo = files.image;
       const originalFileName = path.basename(photo.originalFilename || "uploaded_image").replace(/\s+/g, "_");
       const newPath = path.join(uploadDir, originalFileName);
 
@@ -48,8 +49,8 @@ const createPortfolio = async (req, res) => {
       }
 
       const newPortfolio = new portfolioModel({
-        title: fields.title || "",
-        description: fields.description || "",
+        title: fields.title?.[0] || "",
+        description: fields.description?.[0] || "",
         image: `https://mern-project-h3ks.onrender.com/uploads/${originalFileName}`,
       });
 
@@ -65,6 +66,7 @@ const createPortfolio = async (req, res) => {
     res.status(500).json({ success: false, message: "Portfolio Creation Failed" });
   }
 };
+
 
 // Get All Portfolios
 const getAllPortfolio = async (req, res) => {
