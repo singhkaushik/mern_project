@@ -17,7 +17,7 @@ import Register from "./components/pages/Register/Register";
 import AdminDashboard from "./components/pages/Admin/Dashboard/AdminDashboard";
 import UserDetails from "./components/pages/Admin/UsersDetails/UserDetails";
 import UserProfile from "./components/pages/Admin/UsersDetails/UserProfile";
-import RoleDetails from "./components/pages/Admin/UsersDetails/roleDetails";
+import RoleDetails from "./components/pages/Admin/UsersDetails/RoleDetails";
 import ErrorBoundary from "./components/pages/ErrorBoundary"; 
 import UserPortfolio from "./components/pages/Admin/UsersDetails/UserPortfolio";
 
