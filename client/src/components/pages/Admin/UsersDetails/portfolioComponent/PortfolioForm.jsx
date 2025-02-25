@@ -13,11 +13,10 @@ import * as yup from "yup";
 import MessageSnackbar from "../../../../../basic utility component/snackbar/MessageSnackbar";
 import Config from "../../../../config/Config";
 
-// ✅ Updated Validation Schema (Allows file upload)
 const portfolioSchema = yup.object({
   title: yup.string().required("Title is required"),
   description: yup.string().required("Description is required"),
-  image: yup.mixed().nullable(), // Accepts files
+  image: yup.mixed().required("Image is required"),
   link: yup.string().url("Invalid URL"),
 });
 
@@ -52,7 +51,6 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
       fd.append("description", values.description);
       fd.append("link", values.link);
 
-      // ✅ Debug: Check FormData before sending
       console.log("FormData Entries:", [...fd.entries()]);
 
       try {
@@ -61,14 +59,14 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
           response = await axios.put(
             `${Config.Backend_Path}/api/v1/portfolio/${initialValues._id}`,
             fd,
-            { withCredentials: true } // ✅ Correct placement
+            { withCredentials: true } 
           );
           setMessage("Portfolio updated successfully!");
         } else {
           response = await axios.post(
             `${Config.Backend_Path}/api/v1/portfolio/create`,
             fd,
-            { withCredentials: true } // ✅ Correct placement
+            { withCredentials: true } 
           );
           setMessage("Portfolio created successfully!");
         }
@@ -84,13 +82,12 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
     },
   });
 
-  // ✅ Handle Image Selection & Update Formik State
   const addImage = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       setImageUrl(URL.createObjectURL(selectedFile));
       setFile(selectedFile);
-      formik.setFieldValue("image", selectedFile); // ✅ Update Formik State
+      formik.setFieldValue("image", selectedFile); 
     }
   };
 
