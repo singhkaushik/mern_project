@@ -37,7 +37,15 @@ app.use(
   })
 );
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"), {
+    setHeaders: (res, path, stat) => {
+      res.set("Access-Control-Allow-Origin", "*");
+    },
+  })
+);
+
 
 // Routes
 app.use("/api/v1/roles", require("./routes/role.routes"));
