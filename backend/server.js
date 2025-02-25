@@ -40,11 +40,14 @@ app.use(
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
-    setHeaders: (res, path, stat) => {
+    setHeaders: (res) => {
       res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+      res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
     },
   })
 );
+
 
 
 // Routes
