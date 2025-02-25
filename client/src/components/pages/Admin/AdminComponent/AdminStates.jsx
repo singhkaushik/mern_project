@@ -4,7 +4,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode"; 
 import Config from "../../../config/Config";
 
-const API_URL = Config.Backend_Path;
+const API_URL = `${Config.Backend_Path}/api/v1`;
 
 const AdminStats = () => {
   const [stats, setStats] = useState({

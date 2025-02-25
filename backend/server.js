@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["https://rolebaac.netlify.app"];
+  : [];
 
 app.use(
   cors({
