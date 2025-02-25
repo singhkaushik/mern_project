@@ -35,7 +35,6 @@ const RoleForm = ({ permissions, onRoleCreated }) => {
     <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
       <Typography variant="h6">Create Role</Typography>
 
-      {/* ✅ Removed undefined successMessage */}
       {error && <Typography color="error">{error}</Typography>}
 
       <Grid container spacing={2}>

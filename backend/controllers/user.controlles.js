@@ -6,12 +6,10 @@ const Role = require("../models/role.model");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
-// Register User
 const Register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -19,22 +17,19 @@ const Register = async (req, res) => {
         .json({ success: false, msg: "User already exists" });
     }
 
-    // Find role by name (convert "admin", "user", etc., into ObjectId)
     const userRole = await Role.findOne({ name: role });
     if (!userRole) {
       return res.status(400).json({ success: false, msg: "Invalid role" });
     }
 
-    // Hash Password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create and Save User
     const user = new User({
       name,
       email,
       password: hashedPassword,
-      role: userRole._id, // Store ObjectId instead of role name
+      role: userRole._id, 
     });
 
     await user.save();
@@ -48,12 +43,10 @@ const Register = async (req, res) => {
   }
 };
 
-// Login User
 const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
     const user = await User.findOne({ email }).populate("role");
     if (!user) {
       return res
@@ -61,7 +54,6 @@ const Login = async (req, res) => {
         .json({ success: false, msg: "Invalid credentials" });
     }
 
-    // Validate Password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res
@@ -69,13 +61,12 @@ const Login = async (req, res) => {
         .json({ success: false, msg: "Invalid credentials" });
     }
 
-    // Generate JWT Token
     const token = jwt.sign(
       { id: user._id, role: user.role.name,
         email: user.email,
         name:user.name
 
-       }, // Send role name in token
+       }, 
       process.env.SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -93,19 +84,16 @@ const Login = async (req, res) => {
   }
 };
 
-// Update User Profile
 const updateUserProfileByRoleId = async (req, res) => {
   try {
     const { name, email } = req.body;
     const roleId = req.params.roleId;
 
-    // Check if email exists in another account
     const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.role.toString() !== roleId) {
       return res.status(400).json({ message: "Email already in use by another account." });
     }
 
-    // Update user details
     const user = await User.findOneAndUpdate(
       { role: roleId },
       { name, email },
@@ -121,7 +109,6 @@ const updateUserProfileByRoleId = async (req, res) => {
 };
 
 
-// Get all users with their role names
 const getUsers = async (req, res) => {
   try {
     const users = await User.find().populate("role"); 
@@ -131,7 +118,6 @@ const getUsers = async (req, res) => {
   }
 };
 
-// Delete User
 const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -146,17 +132,15 @@ const getStates = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
 
-    // Fetch Role ObjectIds for "admin" and "user"
     const adminRole = await Role.findOne({ name: "admin" });
     const userRole = await Role.findOne({ name: "user" });
 
     if (!adminRole || !userRole) {
-      console.error("Roles not found:", { adminRole, userRole }); // Debugging Log
+      console.error("Roles not found:", { adminRole, userRole }); 
       return res.status(500).json({ message: "Roles not found in database" });
     }
 
-    console.log("Admin Role Found:", adminRole); // Debugging Log
-    console.log("User Role Found:", userRole); // Debugging Log
+   
 
     const activeUsers = await User.countDocuments({
       role: { $in: [adminRole._id, userRole._id] },
@@ -177,18 +161,15 @@ const updateUser = async (req, res) => {
   try {
     const { name, email, role } = req.body;
 
-    // Check if User ID exists
     if (!req.params.id) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    // Check if the user exists
     const userExists = await User.findById(req.params.id);
     if (!userExists) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Prevent non-admins from changing roles
     if (req.user.role !== "admin" && req.body.role) {
       return res
         .status(403)

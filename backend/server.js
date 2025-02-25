@@ -7,7 +7,6 @@ const connectDB = require("./config/db");
 const path = require("path");
 
 
-// Initialize Express App
 const app = express();
 
 // Connect to Database
@@ -16,13 +15,12 @@ connectDB();
 // Middleware
 app.use(helmet());  // Security headers
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Handle form data
-app.use(cookieParser()); // Parse cookies
+app.use(express.urlencoded({ extended: true })); 
+app.use(cookieParser()); 
 
-// CORS Configuration
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["http://localhost:5173"];
+  : ["https://rolebaac.netlify.app"];
 
 app.use(
   cors({
@@ -33,7 +31,6 @@ app.use(
   })
 );
 
-// 🔥 Serve Uploaded Images AFTER Middleware
 // Routes
 app.use("/api/v1/roles", require("./routes/role.routes"));
 app.use("/api/v1/permissions", require("./routes/permission.routes"));
@@ -48,4 +45,4 @@ app.use((err, req, res, next) => {
 
 // Start Server
 const PORT = process.env.PORT || 4001;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

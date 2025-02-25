@@ -14,10 +14,11 @@ import {
   Box,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { motion } from "framer-motion"; // For smooth animations
+import { motion } from "framer-motion"; 
 import axios from "axios";
+import Config from "../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1/portfolio";
+const API_URL = `${Config.Backend_Path}/api/v1/portfolio`;
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
@@ -43,7 +44,7 @@ const Portfolio = () => {
   };
 
   const getImageUrl = (image) => {
-    return image ? `/images/${image}` : "/default-placeholder.png"; // Ensure correct image path
+    return image ? `/images/${image}` : "/default-placeholder.png"; 
   };
 
   return (

@@ -1,6 +1,7 @@
 import axios from "axios";
+import Config from "../../../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1/portfolio";
+const API_URL = `${Config.Backend_Path}/api/v1/portfolio`;
 
 // Fetch all portfolio items
 export const fetchPortfolio = async () => {

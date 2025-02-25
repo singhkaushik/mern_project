@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Form, Button, Alert, Card } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
+import Config from "../../config/Config"
 
 
 const Login = () => {
@@ -22,7 +23,7 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const resp = await axios.post(
-          "http://localhost:4000/api/v1/users/signin",
+          `${Config.Backend_Path}/api/v1/users/signin`,
           values
         );
         const token = resp.data.token;

@@ -1,7 +1,6 @@
 const Role = require("../models/role.model");
 const Permission = require("../models/permission.model");
 
-// Create a new permission
 const CreatePermission = async (req, res) => {
   const { name, description } = req.body;
 
@@ -23,7 +22,6 @@ const CreatePermission = async (req, res) => {
   }
 };
 
-// Get all permissions
 const GetPermissions = async (req, res) => {
   try {
     const permissions = await Permission.find();
@@ -34,7 +32,6 @@ const GetPermissions = async (req, res) => {
 };
 
 
-// Get permissions by role ID
 const GetPermissionsByRole = async (req, res) => {
   const { roleId } = req.params;
 
@@ -51,7 +48,6 @@ const GetPermissionsByRole = async (req, res) => {
   }
 };
 
-// Get permissions by role name
 const GetPermissionsByRoleName = async (req, res) => {
   const { roleName } = req.params;
 

@@ -10,7 +10,7 @@ import useUserRole from "../../../config/UseUserRole";
 const UserDetails = ({ toggleTheme, themeMode }) => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [dataLoading, setDataLoading] = useState(true); // Renamed to avoid conflict
+  const [dataLoading, setDataLoading] = useState(true); 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
@@ -34,7 +34,7 @@ const UserDetails = ({ toggleTheme, themeMode }) => {
   };
 
   useEffect(() => {
-    loadData(); // Fetch users and roles when component mounts
+    loadData(); 
   }, []);
 
   const handleDeleteUser = async (id) => {
@@ -54,7 +54,7 @@ const UserDetails = ({ toggleTheme, themeMode }) => {
         themeMode={themeMode}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        role={userRole} // ✅ Corrected
+        role={userRole} 
       />
       <Box sx={{ display: "flex" }}>
         <AdminSidebar isSidebarOpen={isSidebarOpen} />

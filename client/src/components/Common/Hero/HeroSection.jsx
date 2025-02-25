@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Hero.css"; // Ensure CSS file is correctly imported
+import "./Hero.css"; 
 
 const HeroSection = () => {
   return (

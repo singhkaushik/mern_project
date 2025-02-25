@@ -3,7 +3,6 @@ const router = express.Router();
 const roleController = require("../controllers/role.controller");
 const { authMiddleware, adminMiddleware } = require("../middleware/authMw");
 
-// Role Management Routes (Admin Only)
 
 // Create a new role
 router.post("/create", authMiddleware, adminMiddleware, roleController.CreateRole);

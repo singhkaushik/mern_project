@@ -38,7 +38,7 @@ const AdminHeader = ({
   // Handle profile modal open/close
   const handleProfileOpen = () => {
     setOpenProfile(true);
-    handleMenuClose(); // Close menu when opening profile
+    handleMenuClose(); 
   };
   const handleProfileClose = () => setOpenProfile(false);
 

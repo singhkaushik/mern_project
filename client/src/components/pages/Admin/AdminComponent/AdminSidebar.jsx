@@ -10,9 +10,6 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 const AdminSidebar = ({ isSidebarOpen }) => {
   const location = useLocation();
   const [menuItems, setMenuItems] = useState([]);
-  
-
-  // Fetch user role using the custom hook
   const { userRole, loading, error } = useUserRole();
 
   useEffect(() => {
@@ -34,9 +31,9 @@ const AdminSidebar = ({ isSidebarOpen }) => {
             ]
       );
     }
-  }, [userRole, loading, error]); // Update when role changes
+  }, [userRole, loading, error]); 
 
-  // Display loading or error messages if necessary
+  
   if (loading) {
     return <p>Loading user role...</p>;
   }

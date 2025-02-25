@@ -20,6 +20,7 @@ import AdminSidebar from "../AdminComponent/AdminSidebar";
 import PortfolioCard from "./portfolioComponent/PortfolioCard";
 import PortfolioForm from "./portfolioComponent/PortfolioForm";
 import useUserRole from "../../../config/UseUserRole";
+import Config from "../../../config/Config"
 
 const UserPortfolio = ({ toggleTheme, themeMode }) => {
   const [portfolioData, setPortfolioData] = useState([]);
@@ -40,7 +41,7 @@ const UserPortfolio = ({ toggleTheme, themeMode }) => {
     try {
       const response = await fetchPortfolio();
       console.log("Fetched Portfolio Data:", response);
-      setPortfolioData(response.data || []); // Ensure portfolio data is an array
+      setPortfolioData(response.data || []); 
     } catch (err) {
       console.error("Error fetching portfolio:", err);
       setErrorMessage(err.message);
@@ -58,7 +59,7 @@ const UserPortfolio = ({ toggleTheme, themeMode }) => {
     try {
       await deletePortfolio(portfolioId);
       console.log(`Portfolio ID ${portfolioId} deleted successfully.`);
-      loadPortfolio(); // Refresh the list after deletion
+      loadPortfolio(); 
     } catch (error) {
       console.error("Failed to delete portfolio:", error);
       setErrorMessage("Failed to delete portfolio. Please try again.");
@@ -66,7 +67,7 @@ const UserPortfolio = ({ toggleTheme, themeMode }) => {
   };
   const updatePortfolio = async (id, updatedData) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/v1/portfolio/${id}`, {
+      const response = await fetch(`${Config.Backend_Path}/api/v1/portfolio/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,69 +1,10 @@
-// import axios from "axios";
-
-// const API_URL = "http://localhost:4000/api/v1/roles";
-// const PERMISSIONS_URL = "http://localhost:4000/api/v1/permissions";
-
-// // Get token from localStorage
-// const getAuthHeaders = () => {
-//     const token = localStorage.getItem("authToken");
-//     return token ? { Authorization: `Bearer ${token}` } : undefined;
-//   };
-  
-// // Fetch all roles
-// export const fetchRoles = async () => {
-//   const response = await axios.get(API_URL, { headers: getAuthHeaders() });
-//   return response.data;
-// };
-
-// // Fetch all permissions
-// export const fetchPermissions = async () => {
-//   const response = await axios.get(PERMISSIONS_URL, { headers: getAuthHeaders() });
-//   return response.data;
-
-// };
-
-// // Create a new role
-// export const createRole = async (roleData) => {
-//   const response = await axios.post(`${API_URL}/create`, roleData, { headers: getAuthHeaders() });
-//   return response.data;
-// };
-
-// // Update a role
-// export const updateRole = async (roleId, updatedRole) => {
-//   const response = await axios.put(`${API_URL}/${roleId}`, updatedRole, { headers: getAuthHeaders() });
-//   return response.data;
-// };
-
-// // Delete a role
-// export const deleteRole = async (roleId) => {
-//   const response = await axios.delete(`${API_URL}/${roleId}`, { headers: getAuthHeaders() });
-//   return response.data;
-// };
-
-
-// export const getPermissions = async (permissionIds) => {
-//     try {
-//       const response = await fetch(`${PERMISSIONS_URL}?ids=${permissionIds.join(",")}`);
-  
-//       if (!response.ok) {
-//         throw new Error(`Error ${response.status}: ${response.statusText}`);
-//       }
-  
-//       return await response.json(); // Ensure it's parsing JSON
-//     } catch (error) {
-//       console.error("Failed to fetch permissions:", error);
-//       return []; // Return an empty array in case of an error
-//     }
-//   };
- 
-  
-  
 import axios from "axios";
+import Config from "../../../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1/roles";
-const PERMISSIONS_URL = "http://localhost:4000/api/v1/permissions";
+const API_URL = `${Config.Backend_Path}/api/v1/roles`;
+const PERMISSIONS_URL = `${Config.Backend_Path}/api/v1/permissions`;
 
-// Get token from localStorage and return headers properly
+// Get token from localStorage 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("authToken");
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
@@ -131,6 +72,6 @@ export const getPermissions = async (permissionIds) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch permissions:", error.response?.data || error.message);
-    return []; // Return an empty array in case of an error
+    return []; 
   }
 };

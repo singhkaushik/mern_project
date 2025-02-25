@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, CircularProgress, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Install using: npm install jwt-decode
+import { jwtDecode } from "jwt-decode"; 
+import Config from "../../../config/Config"
 
-const API_BASE_URL = "http://localhost:4000/api/v1/users";
+const API_BASE_URL = `${Config.Backend_Path}/api/v1/users`;
 
 const AdminProfile = ({ handleClose }) => {
   const token = localStorage.getItem("authToken");
@@ -12,7 +13,7 @@ const AdminProfile = ({ handleClose }) => {
   const [profile, setProfile] = useState({
     name: decoded?.name || "",
     email: decoded?.email || "",
-    role: decoded?.role || "", // Read-only
+    role: decoded?.role || "", 
   });
 
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const AdminProfile = ({ handleClose }) => {
 
     try {
       const response = await axios.put(
-        `${API_BASE_URL}/${decoded.id}`, // Update only name & email
+        `${API_BASE_URL}/${decoded.id}`, 
         {
           name: profile.name,
           email: profile.email,
@@ -45,14 +46,12 @@ const AdminProfile = ({ handleClose }) => {
       if (response.status === 200) {
         setSnackbar({ open: true, message: "Profile updated successfully!", severity: "success" });
 
-        // ✅ Update local state immediately
         setProfile((prev) => ({
           ...prev,
           name: profile.name,
           email: profile.email,
         }));
 
-        // ✅ If backend returns updated token, update localStorage
         if (response.data.token) {
           localStorage.setItem("authToken", response.data.token);
         }
@@ -73,7 +72,7 @@ const AdminProfile = ({ handleClose }) => {
 
       <TextField fullWidth label="Name" name="name" value={profile.name} onChange={handleChange} sx={{ mb: 2 }} />
       <TextField fullWidth label="Email" name="email" value={profile.email} onChange={handleChange} sx={{ mb: 2 }} />
-      <TextField fullWidth label="Role" name="role" value={profile.role} disabled sx={{ mb: 2 }} /> {/* Read-only */}
+      <TextField fullWidth label="Role" name="role" value={profile.role} disabled sx={{ mb: 2 }} /> 
 
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
         <Button variant="contained" color="primary" type="submit" disabled={loading}>

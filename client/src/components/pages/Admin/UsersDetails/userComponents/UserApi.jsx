@@ -1,8 +1,9 @@
 import axiosInstance from "../../../axiosInstance";
 import axios from "axios";
+import Config from "../../../../config/Config"
 
 
-const API_URL = "http://localhost:4000/api/v1"; // Adjust if needed
+const API_URL = `${Config.Backend_Path}/api/v1`; 
 
 const getToken = () => localStorage.getItem("authToken");
 
@@ -42,7 +43,7 @@ export const createUser = async (user) => {
 
     const userData = { 
       ...user, 
-      role: user.role._id || user.role // Ensuring ObjectId
+      role: user.role._id || user.role 
     };
 
     console.log("User Data Sent to Backend:", userData);
@@ -65,7 +66,7 @@ export const createUser = async (user) => {
 export const updateUser = async (id, userData, token) => {
   try {
     const response = await axios.put(
-      `http://localhost:4000/api/v1/users/${id}`,
+      `${Config.Backend_Path}/api/v1/users/${id}`,
       userData,
       {
         headers: {

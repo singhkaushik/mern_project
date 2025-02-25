@@ -4,7 +4,7 @@ import AdminSidebar from "../AdminComponent/AdminSidebar";
 import AdminStats from "../AdminComponent/AdminStates";
 import AdminHeader from "../AdminComponent/AdminHeader";
 import { Outlet } from "react-router-dom";
-import useUserRole from "../../../config/UseUserRole"; // Custom hook
+import useUserRole from "../../../config/UseUserRole"; 
 
 const AdminDashboard = ({ toggleTheme, themeMode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -17,14 +17,11 @@ const AdminDashboard = ({ toggleTheme, themeMode }) => {
 
   return (
     <>
-      {/* Display a loading indicator */}
       {loading && (
         <div style={{ textAlign: "center", padding: "20px" }}>
           <p>Loading user role...</p>
         </div>
       )}
-
-      {/* Display error if user role fetch fails */}
       {error && (
         <div style={{ textAlign: "center", padding: "20px", color: "red" }}>
           <p>Failed to load user role: {error}</p>

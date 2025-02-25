@@ -1,5 +1,10 @@
-const Config = {
-    Backend_Path: import.meta.env.VITE_BACKEND_PATH || "http://localhost:4000/api/v1"
-};
-
-export default Config;
+if (!import.meta.env.VITE_BACKEND_PATH) {
+    throw new Error("Backend Path is not set");
+  }
+  
+  const Config = {
+    Backend_Path: import.meta.env.VITE_BACKEND_PATH 
+  };
+  
+  export default Config;
+  

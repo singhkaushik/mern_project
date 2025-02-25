@@ -14,8 +14,9 @@ import {
   Spinner,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Config from "../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1";
+const API_URL = `${Config.Backend_Path}/api/v1`;
 
 const Register = () => {
   const [roles, setRoles] = useState([]);
@@ -69,7 +70,7 @@ const Register = () => {
         formik.resetForm();
 
         setTimeout(() => {
-          navigate("/login"); // Redirect to login after successful signup
+          navigate("/login"); 
         }, 2000);
       } catch (e) {
         setMessage(

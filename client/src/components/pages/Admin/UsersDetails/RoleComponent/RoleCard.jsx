@@ -18,15 +18,15 @@ import {
   TextField,
   Switch,
 } from "@mui/material";
-import { deleteRole, updateRole, fetchRoles, fetchPermissions } from "./api"; // Ensure correct import
+import { deleteRole, updateRole, fetchRoles, fetchPermissions } from "./api"; 
 
 const RoleCard = ({ role, setRoles, setSuccessMessage }) => {
   const [open, setOpen] = useState(false);
-  const [allPermissions, setAllPermissions] = useState([]); // Store all permissions
+  const [allPermissions, setAllPermissions] = useState([]); 
   const [editedRole, setEditedRole] = useState({
     name: role.name,
     permissions: role.permissions,
-    isActive: role.isActive, // Track role activation status
+    isActive: role.isActive, 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,7 +58,7 @@ const RoleCard = ({ role, setRoles, setSuccessMessage }) => {
   // Handle Role Update
   const handleUpdate = async () => {
     setLoading(true);
-    setError(""); // Clear previous error
+    setError(""); 
 
     try {
       const updatedRoleData = {

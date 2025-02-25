@@ -18,22 +18,24 @@ import AdminDashboard from "./components/pages/Admin/Dashboard/AdminDashboard";
 import UserDetails from "./components/pages/Admin/UsersDetails/UserDetails";
 import UserProfile from "./components/pages/Admin/UsersDetails/UserProfile";
 import RoleDetails from "./components/pages/Admin/UsersDetails/RoleDetails";
-import ErrorBoundary from "./components/pages/ErrorBoundary"; 
+import ErrorBoundary from "./components/pages/ErrorBoundary";
 import UserPortfolio from "./components/pages/Admin/UsersDetails/UserPortfolio";
+import Unauthorized from "./components/pages/Unauthorized"
 
 function App() {
-  const [themeMode, setThemeMode] = useState(localStorage.getItem("theme") || "light");
+  const [themeMode, setThemeMode] = useState(
+    localStorage.getItem("theme") || "light"
+  );
 
   // Toggle theme function
   const toggleTheme = () => {
     setThemeMode((prevMode) => {
       const newMode = prevMode === "light" ? "dark" : "light";
-      localStorage.setItem("theme", newMode); // Save to localStorage
+      localStorage.setItem("theme", newMode);
       return newMode;
     });
   };
 
-  // Create theme based on mode
   const theme = useMemo(
     () =>
       createTheme({
@@ -50,37 +52,64 @@ function App() {
       <BrowserRouter>
         <ErrorBoundary>
           <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} >
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/" element={<Home />}>
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route
+                path="/dashboard"
+                element={
+                  <AdminDashboard
+                    toggleTheme={toggleTheme}
+                    themeMode={themeMode}
+                  />
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <UserDetails
+                    toggleTheme={toggleTheme}
+                    themeMode={themeMode}
+                  />
+                }
+              />
+              <Route
+                path="/admin/role"
+                element={
+                  <RoleDetails
+                    toggleTheme={toggleTheme}
+                    themeMode={themeMode}
+                  />
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <UserPortfolio
+                    toggleTheme={toggleTheme}
+                    themeMode={themeMode}
+                  />
+                }
+              />
+              <Route
+                path="/permissions"
+                element={
+                  <UserProfile
+                    toggleTheme={toggleTheme}
+                    themeMode={themeMode}
+                  />
+                }
+              />
             </Route>
 
-            {/* Admin Routes */}
-            <Route
-              path="/dashboard"
-              element={<AdminDashboard toggleTheme={toggleTheme} themeMode={themeMode} />}
-            />
-            <Route
-              path="/admin/users"
-              element={<UserDetails toggleTheme={toggleTheme} themeMode={themeMode} />}
-            />
-            <Route
-              path="/admin/role"
-              element={<RoleDetails toggleTheme={toggleTheme} themeMode={themeMode} />}
-            />
-            <Route
-              path="/users"
-              element={<UserPortfolio toggleTheme={toggleTheme} themeMode={themeMode} />}
-            />
-            <Route
-              path="/permissions"
-              element={<UserProfile toggleTheme={toggleTheme} themeMode={themeMode} />}
-            />
+            {/* Default Route */}
+            <Route path="*" element={<Unauthorized />} />
           </Routes>
         </ErrorBoundary>
       </BrowserRouter>

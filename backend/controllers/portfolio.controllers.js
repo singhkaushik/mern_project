@@ -5,7 +5,6 @@ const fs = require("fs");
 const mongoose=require("mongoose"); 
 const portfolioModel = require("../models/portfolio.model");
 
-// 📌 Create Portfolio
 const createPortfolio = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
@@ -19,10 +18,9 @@ const createPortfolio = async (req, res) => {
         return res.status(400).json({ success: false, message: "Image file is required" });
       }
 
-      const originalFileName = photo.originalFilename.replace(/\s+/g, "_"); // Replace spaces
+      const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
       const newPath = path.join(__dirname, process.env.IMAGE_PATH, originalFileName);
 
-      // Move file to destination
       fs.copyFileSync(photo.filepath, newPath);
 
       const newPortfolio = new portfolioModel({
@@ -44,7 +42,6 @@ const createPortfolio = async (req, res) => {
   }
 };
 
-// 📌 Get All Portfolios
 const getAllPortfolio = async (req, res) => {
   try {
     const portfolios = await portfolioModel.find();
@@ -58,7 +55,6 @@ const getAllPortfolio = async (req, res) => {
   }
 };
 
-// 📌 Update Portfolio
 const updatePortfolio = async (req, res) => {
   try {
     const id = req.params.id;
@@ -78,13 +74,11 @@ const updatePortfolio = async (req, res) => {
         const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
         const newPath = path.join(__dirname, process.env.IMAGE_PATH, originalFileName);
 
-        // Delete old image if exists
         if (portfolio.image) {
           const oldImagePath = path.join(__dirname, process.env.IMAGE_PATH, portfolio.image);
           if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
         }
 
-        // Save new image
         fs.copyFileSync(photo.filepath, newPath);
         portfolio.image = originalFileName;
       }
@@ -121,7 +115,6 @@ const deletePortfolio= async (req, res) => {
   }
   
 
-// ✅ Export Controller Functions
 module.exports = {
   createPortfolio,
   getAllPortfolio,

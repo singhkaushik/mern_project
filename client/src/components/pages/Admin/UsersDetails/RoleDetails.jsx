@@ -10,7 +10,7 @@ import useUserRole from "../../../config/UseUserRole";
 const RoleDetails = ({ toggleTheme, themeMode }) => {
   const [roles, setRoles] = useState([]);
   const [permissions, setPermissions] = useState([]);
-  const [dataLoading, setDataLoading] = useState(false); // Renamed to avoid conflict
+  const [dataLoading, setDataLoading] = useState(false); 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -58,7 +58,7 @@ const RoleDetails = ({ toggleTheme, themeMode }) => {
         themeMode={themeMode}
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
-        role={userRole} // ✅ Corrected
+        role={userRole} 
       />
       <Box sx={{ display: "flex" }}>
         <AdminSidebar isSidebarOpen={isSidebarOpen} />

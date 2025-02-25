@@ -17,9 +17,10 @@ import {
 } from "@mui/material";
 import AdminHeader from "../AdminComponent/AdminHeader";
 import AdminSidebar from "../AdminComponent/AdminSidebar";
+import Config from "../../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1/users";
-const ROLES_URL = "http://localhost:4000/api/v1/roles";
+const API_URL = `${Config.Backend_Path}/api/v1/users`;
+const ROLES_URL = `${Config.Backend_Path}/api/v1/roles`;
 
 const UserProfile = ({ toggleTheme, themeMode }) => {
   const [user, setUser] = useState(null);

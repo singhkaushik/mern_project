@@ -11,6 +11,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import MessageSnackbar from "../../../../../basic utility component/snackbar/MessageSnackbar";
+import Config from "../../../../config/Config"
 
 // Validation Schema
 const portfolioSchema = yup.object({
@@ -55,13 +56,13 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
         let response;
         if (initialValues._id) {
           response = await axios.put(
-            `http://localhost:4000/api/v1/portfolio/${initialValues._id}`,
+            `${Config.Backend_Path}/api/v1/portfolio/${initialValues._id}`,
             fd
           );
           setMessage("Portfolio updated successfully!");
         } else {
           response = await axios.post(
-            "http://localhost:4000/api/v1/portfolio/create",
+            `${Config.Backend_Path}/api/v1/portfolio/create`,
             fd
           );
           setMessage("Portfolio created successfully!");

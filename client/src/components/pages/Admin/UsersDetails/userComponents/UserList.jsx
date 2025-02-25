@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Card, CardContent, Typography, Divider, Chip, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Select, CircularProgress } from "@mui/material";
 import axiosInstance from "../../../axiosInstance";
+import Config from "../../../../config/Config"
 
-const API_URL = "http://localhost:4000/api/v1"; // Adjust as needed
+const API_URL = `${Config.Backend_Path}/api/v1`; 
 
 const getToken = () => localStorage.getItem("authToken");
 
@@ -25,9 +26,7 @@ const UserList = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [usersData, rolesData] = await Promise.all([fetchUsers(), fetchRoles()]);
-      console.log("Users:", usersData);  // ✅ Debugging
-      console.log("Roles:", rolesData);  // ✅ Debugging
+      const [usersData, rolesData] = await Promise.all([fetchUsers(), fetchRoles()]); 
       setUsers(usersData);
       setRoles(rolesData);
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Card, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Import jwtDecode properly
+import { jwtDecode } from "jwt-decode"; 
 import Config from "../../../config/Config";
 
 const API_URL = Config.Backend_Path;
@@ -23,7 +23,7 @@ const AdminStats = () => {
         const token = localStorage.getItem("authToken");
         if (!token) throw new Error("No authentication token found");
 
-        // Decode JWT to get user role if available
+        // Decode JWT 
         const decoded = jwtDecode(token);
         const userRole = decoded?.role || "User";
 
@@ -38,7 +38,7 @@ const AdminStats = () => {
           totalUsers: users.length,
           activeUsers: users.filter((user) => user.isActive).length,
           pendingApprovals: users.filter((user) => user.status === "pending").length,
-          userRole, // Set role from token
+          userRole, 
         });
       } catch (err) {
         console.error("Error fetching stats:", err);
