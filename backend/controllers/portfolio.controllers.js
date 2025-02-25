@@ -8,7 +8,6 @@ const express = require("express");
 
 
 const uploadDir = path.join(__dirname, "../uploads");
-const fs = require("fs");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
