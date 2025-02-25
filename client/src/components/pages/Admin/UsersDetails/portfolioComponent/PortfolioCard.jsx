@@ -65,7 +65,7 @@ const PortfolioCard = ({ portfolioData, onDelete, updatePortfolio }) => {
           {portfolioData.image ? (
             <Box
               component="img"
-              src={`/uploads/${portfolioData.image}`}
+              src={`https://mern-project-h3ks.onrender.com/uploads/${portfolioData.image}`}
               alt="Portfolio"
               sx={{
                 width: "100%",
