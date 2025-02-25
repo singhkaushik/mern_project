@@ -2,46 +2,59 @@ require("dotenv").config();
 const formidable = require("formidable");
 const path = require("path");
 const fs = require("fs");
-const mongoose=require("mongoose"); 
+const mongoose = require("mongoose");
 const portfolioModel = require("../models/portfolio.model");
+const express = require("express");
+const path = require("path");
 
+
+const uploadDir = path.join(__dirname, "../uploads");
+const fs = require("fs");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Serve images statically
+const router = express.Router();
+router.use("/uploads", express.static(uploadDir));
+
+// Create Portfolio
 const createPortfolio = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-    const uploadDir = path.join(__dirname, "../../public/uploads");
-
-    // Ensure upload directory exists
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    form.uploadDir = uploadDir; // Set correct directory
-    form.keepExtensions = true; // Preserve file extensions
+    form.uploadDir = uploadDir;
+    form.keepExtensions = true;
+    form.multiples = false; 
 
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(400).json({ success: false, message: "File upload error" });
       }
 
-      const photo = files.image?.[0] || files.image;
+      const photo = files.image?.filepath ? files.image : null;
       if (!photo) {
         return res.status(400).json({ success: false, message: "Image file is required" });
       }
 
-      const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
+      const originalFileName = path.basename(photo.originalFilename).replace(/\s+/g, "_");
       const newPath = path.join(uploadDir, originalFileName);
 
       try {
-        await fs.promises.rename(photo.filepath, newPath); // Ensure file move is completed
+        await fs.promises.rename(photo.filepath, newPath); 
       } catch (fileError) {
         console.error("File Move Error:", fileError);
         return res.status(500).json({ success: false, message: "File move failed" });
       }
 
+      // Save portfolio data
       const newPortfolio = new portfolioModel({
-        title: fields.title?.[0] || fields.title,
-        description: fields.description?.[0] || fields.description,
-        image: originalFileName,
+        title: fields.title || "",
+        description: fields.description || "",
+        image: `https://mern-project-h3ks.onrender.com/uploads/${originalFileName}`, 
       });
 
       const savedPortfolio = await newPortfolio.save();
@@ -56,6 +69,7 @@ const createPortfolio = async (req, res) => {
     res.status(500).json({ success: false, message: "Portfolio Creation Failed" });
   }
 };
+
 const updatePortfolio = async (req, res) => {
   try {
     const id = req.params.id;
@@ -65,27 +79,23 @@ const updatePortfolio = async (req, res) => {
     }
 
     const form = new formidable.IncomingForm();
-    const uploadDir = path.join(__dirname, "../../public/uploads");
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
     form.uploadDir = uploadDir;
     form.keepExtensions = true;
+    form.multiples = false;
 
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(400).json({ success: false, message: "Form parsing error" });
       }
 
-      if (files.image) {
-        const photo = files.image?.[0] || files.image;
-        const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
+      if (files.image?.filepath) {
+        const photo = files.image;
+        const originalFileName = path.basename(photo.originalFilename).replace(/\s+/g, "_");
         const newPath = path.join(uploadDir, originalFileName);
 
+        // Delete old image
         if (portfolio.image) {
-          const oldImagePath = path.join(uploadDir, portfolio.image);
+          const oldImagePath = path.join(uploadDir, path.basename(portfolio.image));
           if (fs.existsSync(oldImagePath)) {
             fs.unlinkSync(oldImagePath);
           }
@@ -93,15 +103,16 @@ const updatePortfolio = async (req, res) => {
 
         try {
           await fs.promises.rename(photo.filepath, newPath);
-          portfolio.image = originalFileName;
+          portfolio.image = `https://mern-project-h3ks.onrender.com/uploads/${originalFileName}`;
         } catch (fileError) {
           console.error("File Move Error:", fileError);
           return res.status(500).json({ success: false, message: "File move failed" });
         }
       }
 
+      // Update portfolio fields
       Object.keys(fields).forEach((field) => {
-        portfolio[field] = fields[field]?.[0] || fields[field];
+        portfolio[field] = fields[field];
       });
 
       await portfolio.save();
@@ -113,8 +124,7 @@ const updatePortfolio = async (req, res) => {
   }
 };
 
-
-
+// Get All Portfolios
 const getAllPortfolio = async (req, res) => {
   try {
     const portfolios = await portfolioModel.find();
@@ -128,31 +138,38 @@ const getAllPortfolio = async (req, res) => {
   }
 };
 
-
-
-const deletePortfolio= async (req, res) => {
-
-    try {
-      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(400).json({ message: "Invalid Portfolio ID" });
-      }
-  
-      const result = await portfolioModel.findByIdAndDelete(req.params.id);
-      if (!result) {
-        return res.status(404).json({ message: "Portfolio not found" });
-      }
-  
-      res.json({ message: "Portfolio deleted successfully" });
-    } catch (error) {
-      console.error("Error deleting portfolio:", error);
-      res.status(500).json({ message: "Error deleting portfolio" });
+// Delete Portfolio
+const deletePortfolio = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid Portfolio ID" });
     }
+
+    const portfolio = await portfolioModel.findById(id);
+    if (!portfolio) {
+      return res.status(404).json({ message: "Portfolio not found" });
+    }
+
+    // Delete Image from Server
+    if (portfolio.image) {
+      const imagePath = path.join(uploadDir, path.basename(portfolio.image));
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    await portfolioModel.findByIdAndDelete(id);
+    res.json({ message: "Portfolio deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting portfolio:", error);
+    res.status(500).json({ message: "Error deleting portfolio" });
   }
-  
+};
 
 module.exports = {
   createPortfolio,
   getAllPortfolio,
   updatePortfolio,
-  deletePortfolio
+  deletePortfolio,
 };
