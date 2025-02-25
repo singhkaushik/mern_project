@@ -36,19 +36,11 @@ app.use(cookieParser());
 //     credentials: true,
 //   })
 // );
-app.use(cors({ origin: '*' })); 
+app.use(cors()); 
 
 
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
-    setHeaders: (res) => {
-      res.set("Access-Control-Allow-Origin", "*");
-      res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-      res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    },
-  })
-);
+app.use('/uploads', express.static('uploads'));
+
 
 
 
