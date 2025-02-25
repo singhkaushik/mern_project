@@ -21,6 +21,7 @@ import RoleDetails from "./components/pages/Admin/UsersDetails/RoleDetails";
 import ErrorBoundary from "./components/pages/ErrorBoundary";
 import UserPortfolio from "./components/pages/Admin/UsersDetails/UserPortfolio";
 import Unauthorized from "./components/pages/Unauthorized"
+import PrivateRoute from "./components/pages/PrivateRoute";
 
 function App() {
   const [themeMode, setThemeMode] = useState(
