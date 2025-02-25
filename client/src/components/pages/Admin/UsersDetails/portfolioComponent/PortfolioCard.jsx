@@ -34,7 +34,7 @@ const PortfolioCard = ({ portfolioData, onDelete, updatePortfolio }) => {
   const handleEdit = () => {
     setOpenEdit(true);
   };
-
+console.log(`https://mern-project-h3ks.onrender.com/uploads/${portfolioData.image}`)
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card
