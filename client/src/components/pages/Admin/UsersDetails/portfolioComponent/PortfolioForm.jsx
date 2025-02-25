@@ -42,7 +42,7 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
         setMessageType("error");
         return;
       }
-
+    
       const fd = new FormData();
       if (file) {
         fd.append("image", file);
@@ -50,36 +50,42 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
       fd.append("title", values.title);
       fd.append("description", values.description);
       fd.append("link", values.link);
-
+    
       console.log("FormData Entries:", [...fd.entries()]);
-
+    
       try {
         let response;
         if (initialValues._id) {
           response = await axios.put(
             `${Config.Backend_Path}/api/v1/portfolio/${initialValues._id}`,
             fd,
-            { withCredentials: true } 
+            { withCredentials: true }
           );
-          setMessage("Portfolio updated successfully!");
         } else {
           response = await axios.post(
             `${Config.Backend_Path}/api/v1/portfolio/create`,
             fd,
-            { withCredentials: true } 
+            { withCredentials: true }
           );
-          setMessage("Portfolio created successfully!");
         }
-
-        setMessageType("success");
-        resetForm();
-        handleClearFile();
-        onSubmit();
+    
+        // ✅ Fix: Ensure we check for success before setting a message
+        if (response.data.success) {
+          setMessage("Portfolio saved successfully!");
+          setMessageType("success");
+          resetForm();
+          handleClearFile();
+          onSubmit();
+        } else {
+          setMessage(response.data.message || "Something went wrong!");
+          setMessageType("error");
+        }
       } catch (error) {
         setMessage(error.response?.data?.message || "Something went wrong!");
         setMessageType("error");
       }
     },
+    
   });
 
   const addImage = (event) => {

@@ -65,7 +65,7 @@ const PortfolioCard = ({ portfolioData, onDelete, updatePortfolio }) => {
           {portfolioData.image ? (
             <Box
               component="img"
-              src={`/uploads/${portfolioData.image}`}
+              src={portfolioData.image}
               alt="Portfolio"
               sx={{
                 width: "100%",
