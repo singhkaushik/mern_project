@@ -1,0 +1,109 @@
+/* About Page Section */
+.about-page-section {
+    padding: 60px 0 20px;
+    background: #f8f9fa;
+    text-align: left;
+}
+
+/* Center Title Section */
+.sec-title {
+    text-align: center;
+    margin-bottom: 40px;
+    
+}
+
+.sec-title .title {
+    display: inline-block;
+    color:#00b8ca;
+    font-size:18px;
+    font-weight:700;
+    padding-right:50px;
+    margin-bottom:15px;
+    display:inline-block;
+    text-transform:capitalize
+}
+
+.sec-title h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #252525;
+    margin-top: 5px;
+}
+
+/* Video Column */
+.video-column {
+    text-align: center;
+}
+
+.about-video {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Column */
+.text-column {
+    padding: 20px;
+}
+
+.text-column h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #252525;
+}
+
+.text-column p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* About List */
+.about-list {
+    list-style: none;
+    padding: 0;
+}
+
+.about-list li {
+    font-size: 16px;
+    color: #252525;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.about-list li::before {
+    content: "✔";
+    color: #00b8ca;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+/* Button */
+.theme-btn {
+    background: #00b8ca;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-top: 15px;
+}
+
+.theme-btn:hover {
+    background: #008ba3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .text-column {
+        text-align: center;
+    }
+
+    .about-list li {
+        justify-content: center;
+    }
+}
