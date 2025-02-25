@@ -63,7 +63,9 @@ export default function PortfolioForm({ initialValues = {}, onSubmit, onCancel }
         } else {
           response = await axios.post(
             `${Config.Backend_Path}/api/v1/portfolio/create`,
-            fd
+            fd,
+            { headers: { "Content-Type": "multipart/form-data" } },
+            { withCredentials: true },
           );
           setMessage("Portfolio created successfully!");
         }
