@@ -8,21 +8,37 @@ const portfolioModel = require("../models/portfolio.model");
 const createPortfolio = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
+    form.uploadDir = path.join(__dirname, "../../public/uploads"); 
+    form.keepExtensions = true; 
+
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(400).json({ success: false, message: "File upload error" });
       }
 
-      const photo = files.image?.[0] || files.image; // Handle both array & object cases
+      const photo = files.image?.[0] || files.image;
       if (!photo) {
         return res.status(400).json({ success: false, message: "Image file is required" });
       }
 
+      // Ensure upload directory exists
+      const uploadDir = path.join(__dirname, "../../public/uploads");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
       const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
-      const newPath = path.join(__dirname, process.env.IMAGE_PATH, originalFileName);
+      const newPath = path.join(uploadDir, originalFileName);
 
-      fs.copyFileSync(photo.filepath, newPath);
+      // Move file from temp directory
+      fs.rename(photo.filepath, newPath, (err) => {
+        if (err) {
+          console.error("File Move Error:", err);
+          return res.status(500).json({ success: false, message: "File upload failed" });
+        }
+      });
 
+      // Save portfolio data
       const newPortfolio = new portfolioModel({
         title: fields.title?.[0] || fields.title,
         description: fields.description?.[0] || fields.description,
@@ -32,7 +48,7 @@ const createPortfolio = async (req, res) => {
       const savedPortfolio = await newPortfolio.save();
       return res.status(201).json({
         success: true,
-        message: "Portfolio Created successfully",
+        message: "Portfolio created successfully",
         data: savedPortfolio,
       });
     });
@@ -41,6 +57,7 @@ const createPortfolio = async (req, res) => {
     res.status(500).json({ success: false, message: "Portfolio Creation Failed" });
   }
 };
+
 
 const getAllPortfolio = async (req, res) => {
   try {
@@ -64,6 +81,9 @@ const updatePortfolio = async (req, res) => {
     }
 
     const form = new formidable.IncomingForm();
+    form.uploadDir = path.join(__dirname, "../../public/uploads");
+    form.keepExtensions = true;
+
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(400).json({ success: false, message: "Form parsing error" });
@@ -72,14 +92,24 @@ const updatePortfolio = async (req, res) => {
       if (files.image) {
         const photo = files.image?.[0] || files.image;
         const originalFileName = photo.originalFilename.replace(/\s+/g, "_");
-        const newPath = path.join(__dirname, process.env.IMAGE_PATH, originalFileName);
+        const newPath = path.join(__dirname, "../../public/uploads", originalFileName);
 
+        // Delete old image if it exists
         if (portfolio.image) {
-          const oldImagePath = path.join(__dirname, process.env.IMAGE_PATH, portfolio.image);
-          if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
+          const oldImagePath = path.join(__dirname, "../../public/uploads", portfolio.image);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
         }
 
-        fs.copyFileSync(photo.filepath, newPath);
+        // Move new image
+        fs.rename(photo.filepath, newPath, (err) => {
+          if (err) {
+            console.error("File Move Error:", err);
+            return res.status(500).json({ success: false, message: "File upload failed" });
+          }
+        });
+
         portfolio.image = originalFileName;
       }
 
@@ -95,6 +125,7 @@ const updatePortfolio = async (req, res) => {
     res.status(500).json({ success: false, message: "Portfolio update failed" });
   }
 };
+
 const deletePortfolio= async (req, res) => {
 
     try {
