@@ -34,7 +34,7 @@ const PortfolioCard = ({ portfolioData, onDelete, updatePortfolio }) => {
   const handleEdit = () => {
     setOpenEdit(true);
   };
-console.log(`https://mern-project-h3ks.onrender.com/uploads/${portfolioData.image}`)
+console.log(`${portfolioData.image}`)
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card
@@ -65,7 +65,7 @@ console.log(`https://mern-project-h3ks.onrender.com/uploads/${portfolioData.imag
           {portfolioData.image ? (
             <Box
               component="img"
-              src={`https://mern-project-h3ks.onrender.com/uploads/${portfolioData.image}`}
+              src={`${portfolioData.image}`}
               alt="Portfolio"
               sx={{
                 width: "100%",
