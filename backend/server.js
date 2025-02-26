@@ -20,16 +20,21 @@ app.use(cookieParser());
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["https://rolebaac.netlify.app","https://mern-project-h3ks.onrender.com"]; 
+  : ["https://rolebaac.netlify.app"]; 
 
-  app.use(
-    cors({
-      origin: allowedOrigins,
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-      credentials: true,
-    })
-  );
+  // app.use(
+  //   cors({
+  //     origin: allowedOrigins,
+  //     methods: ["GET", "POST", "PUT", "DELETE"],
+  //     allowedHeaders: ["Content-Type", "Authorization"],
+  //     credentials: true,
+  //   })
+  // );
+  app.use(cors({
+    origin: "https://rolebaac.netlify.app", 
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type, Authorization"
+  }));
   
   // Allow CORS for static files
   app.use("/uploads", (req, res, next) => {
