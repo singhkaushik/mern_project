@@ -31,19 +31,19 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   //   })
   // );
   app.use(cors({
-    origin: "*", 
+    origin: "https://rolebaac.netlify.app", 
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type, Authorization"
   }));
   
   // Allow CORS for static files
-  app.use("/uploads", (req, res, next) => {
+  app.use("https://mern-project-h3ks.onrender.com/uploads", (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*"); 
     res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
   });
-  app.use('/uploads', express.static('uploads'));
+  // app.use('/uploads', express.static('uploads'));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
   
