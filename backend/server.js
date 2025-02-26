@@ -31,7 +31,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   //   })
   // );
   app.use(cors({
-    origin: "https://rolebaac.netlify.app", 
+    origin: "*", 
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type, Authorization"
   }));
@@ -44,6 +44,8 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     next();
   });
   app.use('/uploads', express.static('uploads'));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
   
 
 
