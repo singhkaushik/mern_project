@@ -44,7 +44,8 @@ const Portfolio = () => {
   };
 
   const getImageUrl = (image) => {
-    return image ? `/images/${image}` : "/default-placeholder.png"; 
+    console.log(image)
+    return image ? `${image}` : "/default-placeholder.png"; 
   };
 
   return (
